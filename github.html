@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub 完全指南 | 从入门到精通</title>
+  <meta name="description" content="系统介绍 GitHub 是什么、为什么重要、核心概念、常用功能，以及非程序员如何使用 GitHub。从零开始，一文搞懂。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #0F0F1A;
+      color: #E5E7EB;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      line-height: 1.2;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .text-gradient-amber {
+      background: linear-gradient(135deg, #FFB547 0%, #FF7A00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .text-gradient-rainbow {
+      background: linear-gradient(135deg, #FFB547 0%, #00D4AA 50%, #9B5DE5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .bg-gradient-hero {
+      background: linear-gradient(180deg, #1A1A2E 0%, #0F0F1A 100%);
+    }
+    .bg-glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+      animation: fade-up 0.8s ease forwards;
+    }
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(15, 15, 26, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #FFB547 0%, #FF7A00 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: #9CA3AF;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #FFB547;
+    }
+    .nav-link.active {
+      color: #FFB547;
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #E5E7EB;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .hero {
+      padding: 160px 0 100px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(155, 93, 229, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 212, 170, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.2);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #00D4AA;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: 52px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      line-height: 1.1;
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: #9CA3AF;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #9CA3AF;
+      margin-top: 4px;
+    }
+    .section {
+      padding: 100px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #00D4AA;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: #9CA3AF;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .what-is-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .what-is-card {
+      padding: 32px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    .what-is-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 212, 170, 0.3);
+    }
+    .what-is-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    .what-is-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .what-is-desc {
+      font-size: 14px;
+      color: #9CA3AF;
+      line-height: 1.7;
+    }
+    .concepts-section {
+      background: rgba(255, 255, 255, 0.01);
+    }
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .concept-item {
+      padding: 28px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .concept-term {
+      font-size: 18px;
+      font-weight: 700;
+      color: #00D4AA;
+      margin-bottom: 10px;
+    }
+    .concept-def {
+      font-size: 14px;
+      color: #D1D5DB;
+      line-height: 1.7;
+    }
+    .workflow-section {
+      padding: 100px 0;
+    }
+    .workflow-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .workflow-title span {
+      background: linear-gradient(135deg, #9B5DE5 0%, #7C3AED 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .workflow-timeline {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .workflow-timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #9B5DE5, #00D4AA);
+    }
+    .workflow-step {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .workflow-step:last-child {
+      margin-bottom: 0;
+    }
+    .step-number {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9B5DE5, #7C3AED);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 20px;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .step-content {
+      flex: 1;
+      padding-top: 8px;
+    }
+    .step-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      color: #9CA3AF;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .step-code {
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #00D4AA;
+      border-left: 3px solid #00D4AA;
+    }
+    .features-section {
+      background: rgba(255, 255, 255, 0.01);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      padding: 28px;
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 181, 71, 0.3);
+    }
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+    .feature-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: #9CA3AF;
+      line-height: 1.6;
+    }
+    .non-programmer-section {
+      padding: 100px 0;
+    }
+    .non-programmer-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .non-programmer-title span {
+      background: linear-gradient(135deg, #FFB547 0%, #FF7A00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .non-programmer-desc {
+      text-align: center;
+      color: #9CA3AF;
+      max-width: 600px;
+      margin: 0 auto 48px;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .use-case-card {
+      padding: 28px;
+      border-radius: 16px;
+      background: rgba(255, 181, 71, 0.05);
+      border: 1px solid rgba(255, 181, 71, 0.15);
+    }
+    .use-case-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .use-case-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .use-case-desc {
+      font-size: 14px;
+      color: #D1D5DB;
+      line-height: 1.7;
+    }
+    .faq-section {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      margin-bottom: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .faq-icon {
+      font-size: 20px;
+      color: #00D4AA;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      padding: 0 24px;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 600px;
+      padding: 0 24px 24px;
+    }
+    .faq-answer p {
+      color: #9CA3AF;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .faq-answer ul {
+      margin-top: 12px;
+      padding-left: 24px;
+      color: #9CA3AF;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .cta-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+    .cta-box {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 48px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(155, 93, 229, 0.1));
+      border: 1px solid rgba(0, 212, 170, 0.2);
+    }
+    .cta-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .cta-desc {
+      color: #9CA3AF;
+      font-size: 16px;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+      color: #0F0F1A;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+    }
+    .footer {
+      padding: 60px 0 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+    .footer-text {
+      color: #6B7280;
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      .hero {
+        padding: 120px 0 60px;
+      }
+      .hero-title {
+        font-size: 32px;
+      }
+      .hero-desc {
+        font-size: 16px;
+      }
+      .hero-stats {
+        gap: 32px;
+      }
+      .stat-number {
+        font-size: 28px;
+      }
+      .section {
+        padding: 60px 0;
+      }
+      .section-title {
+        font-size: 28px;
+      }
+      .workflow-title,
+      .non-programmer-title {
+        font-size: 24px;
+      }
+      .workflow-timeline::before {
+        left: 20px;
+      }
+      .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .step-title {
+        font-size: 17px;
+      }
+      .cta-box {
+        padding: 32px 24px;
+      }
+      .cta-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">→</div>
+        <span>DevFlow</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">开发流程</a>
+        <a href="ai-tools.html" class="nav-link">AI 工具对比</a>
+        <a href="github.html" class="nav-link active">GitHub 指南</a>
+        <a href="cert-query.html" class="nav-link">证书查询</a>
+      </div>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <section class="hero bg-gradient-hero">
+    <div class="container">
+      <div class="hero-content animate-fade-up">
+        <div class="hero-badge">
+          <span>🐙</span>
+          <span>从零开始学 GitHub</span>
+        </div>
+        <h1 class="hero-title">
+          GitHub 完全指南
+          <span class="text-gradient-rainbow">一文搞懂</span>
+        </h1>
+        <p class="hero-desc">
+          GitHub 是什么？为什么全世界的程序员都在用？
+          就算你不是程序员，了解 GitHub 也能帮你更好地协作、管理项目。
+          这篇文章用大白话带你从零认识 GitHub。
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="stat-number">1亿+</div>
+            <div class="stat-label">用户数量</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-number">4亿+</div>
+            <div class="stat-label">代码仓库</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">国家地区</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header scroll-reveal">
+        <span class="section-label">基础认知</span>
+        <h2 class="section-title">GitHub 到底是什么？</h2>
+        <p class="section-desc">用三个比喻，让你秒懂 GitHub</p>
+      </div>
+      <div class="what-is-grid">
+        <div class="what-is-card scroll-reveal">
+          <div class="what-is-icon" style="background: linear-gradient(135deg, rgba(0,212,170,0.15), rgba(0,180,140,0.15));">📚</div>
+          <h3 class="what-is-title">代码的"图书馆"</h3>
+          <p class="what-is-desc">
+            GitHub 就像一个巨大的代码图书馆，全世界的程序员都把自己的代码放在这里。
+            你可以借阅（下载）别人的代码，也可以把自己的代码存进去，还能和别人一起"写书"（协作开发）。
+          </p>
+        </div>
+        <div class="what-is-card scroll-reveal">
+          <div class="what-is-icon" style="background: linear-gradient(135deg, rgba(155,93,229,0.15), rgba(120,60,180,0.15));">🔄</div>
+          <h3 class="what-is-title">项目的"时光机"</h3>
+          <p class="what-is-desc">
+            GitHub 能记录代码的每一次修改，谁改了什么、什么时候改的，一清二楚。
+            改错了还能"穿越回去"，就像游戏存档一样，可以随时回退到之前的版本。
+          </p>
+        </div>
+        <div class="what-is-card scroll-reveal">
+          <div class="what-is-icon" style="background: linear-gradient(135deg, rgba(255,181,71,0.15), rgba(255,122,0,0.15));">🤝</div>
+          <h3 class="what-is-title">团队的"协作平台"</h3>
+          <p class="what-is-desc">
+            几十上百人一起开发同一个项目，怎么不乱套？
+            GitHub 提供了完整的协作工具，让大家能有序地分工合作、讨论问题、审核代码。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section concepts-section">
+    <div class="container">
+      <div class="section-header scroll-reveal">
+        <span class="section-label">核心概念</span>
+        <h2 class="section-title">这些名词，一次搞懂</h2>
+        <p class="section-desc">刚接触 GitHub 会看到很多新名词，其实原理都很简单</p>
+      </div>
+      <div class="concepts-grid">
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">🗄️ Repository (仓库 / Repo)</div>
+          <p class="concept-def">
+            一个项目就是一个仓库。可以理解为项目文件夹，里面放着项目的所有文件和修改历史。
+            有公开的（任何人都能看）和私有的（只有你授权的人能看）。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">📋 Commit (提交)</div>
+          <p class="concept-def">
+            一次保存就是一次 commit。每次提交都会记录"谁在什么时间改了什么"，
+            还可以写一段说明，告诉别人这次改了啥。就像写日志一样。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">🌿 Branch (分支)</div>
+          <p class="concept-def">
+            想象你在画一幅画，想试试新的配色，但又怕改坏了。
+            分支就是"复制一份出来试试"，试好了再合并到主版本上，不影响原来的。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">🔀 Pull Request (PR / 合并请求)</div>
+          <p class="concept-def">
+            "我改好了，请求合并到主版本"。发 PR 就是告诉大家：我这边做完了，
+            请来 review（审核）一下，没问题就合并进去。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">🍴 Fork (复刻)</div>
+          <p class="concept-def">
+            看到别人的项目不错，想自己改着玩？Fork 就是"复制一份到我自己名下"，
+            你可以随便改，不会影响原来的项目。改得好还可以申请合并回去。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">⭐ Star (星标)</div>
+          <p class="concept-def">
+            就像朋友圈点赞。看到好的项目点个 Star，表示你喜欢、收藏了。
+            项目的 Star 数量越多，说明越受欢迎。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">🐛 Issue (议题)</div>
+          <p class="concept-def">
+            发现 Bug 了？有新想法？都可以提 Issue。
+            相当于项目的"留言板/工单系统"，大家在这里讨论问题、追踪进度。
+          </p>
+        </div>
+        <div class="concept-item scroll-reveal">
+          <div class="concept-term">⚡ GitHub Actions</div>
+          <p class="concept-def">
+            自动化工具。可以设置"代码一提交，就自动测试、自动部署"，
+            省去很多重复劳动，相当于你的"自动化助手"。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="workflow-section">
+    <div class="container">
+      <h2 class="workflow-title scroll-reveal">典型工作流：<span>一次完整的开发</span></h2>
+      <div class="workflow-timeline">
+        <div class="workflow-step scroll-reveal">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3 class="step-title">创建/克隆仓库</h3>
+            <p class="step-desc">
+              新项目：在 GitHub 上创建一个新仓库<br>
+              已有项目：把仓库克隆（下载）到自己电脑上
+            </p>
+            <div class="step-code">git clone https://github.com/xxx/xxx.git</div>
+          </div>
+        </div>
+        <div class="workflow-step scroll-reveal">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3 class="step-title">创建新分支</h3>
+            <p class="step-desc">
+              不要直接在主分支上改！新建一个分支，在新分支上干活，
+              这样改坏了也不怕，主版本始终是稳定的。
+            </p>
+            <div class="step-code">git checkout -b my-feature</div>
+          </div>
+        </div>
+        <div class="workflow-step scroll-reveal">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3 class="step-title">写代码，提交修改</h3>
+            <p class="step-desc">
+              改完一部分就提交一次，写清楚改了什么。
+              小步快跑，比一次改一大堆要好维护得多。
+            </p>
+            <div class="step-code">git add .<br>git commit -m "添加了登录功能"</div>
+          </div>
+        </div>
+        <div class="workflow-step scroll-reveal">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3 class="step-title">推送到 GitHub</h3>
+            <p class="step-desc">
+              把本地的修改推送到 GitHub 上，这样别人就能看到你的工作了，
+              也相当于在云端备份了一份。
+            </p>
+            <div class="step-code">git push origin my-feature</div>
+          </div>
+        </div>
+        <div class="workflow-step scroll-reveal">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3 class="step-title">发起 Pull Request</h3>
+            <p class="step-desc">
+              功能做完了，发起 PR 请求合并。写清楚做了什么、怎么测试的，
+              让队友来 Code Review（代码审查）。
+            </p>
+          </div>
+        </div>
+        <div class="workflow-step scroll-reveal">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h3 class="step-title">Code Review & 合并</h3>
+            <p class="step-desc">
+              队友审核代码，有问题就讨论修改。没问题了就合并到主分支。
+              一次完整的开发就完成了！
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section features-section">
+    <div class="container">
+      <div class="section-header scroll-reveal">
+        <span class="section-label">核心功能</span>
+        <h2 class="section-title">GitHub 能做什么？</h2>
+        <p class="section-desc">远不止存代码，GitHub 是一个完整的开发生态</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">💾</div>
+          <h3 class="feature-name">代码托管</h3>
+          <p class="feature-desc">最基础也是最核心的功能，安全存储你的代码</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">🔄</div>
+          <h3 class="feature-name">版本控制</h3>
+          <p class="feature-desc">记录每一次修改，随时可以回退到历史版本</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">👥</div>
+          <h3 class="feature-name">团队协作</h3>
+          <p class="feature-desc">多人同时开发，互不干扰，最后有序合并</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">🐛</div>
+          <h3 class="feature-name">Issue 追踪</h3>
+          <p class="feature-desc">Bug、需求、任务都在这里管理，一目了然</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-name">CI/CD 自动化</h3>
+          <p class="feature-desc">自动测试、自动部署，解放双手</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">📖</div>
+          <h3 class="feature-name">文档 Wiki</h3>
+          <p class="feature-desc">项目文档、知识库，和代码放在一起</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-name">Pages 托管</h3>
+          <p class="feature-desc">免费托管静态网站，个人博客神器</p>
+        </div>
+        <div class="feature-card scroll-reveal">
+          <div class="feature-icon">🔐</div>
+          <h3 class="feature-name">安全扫描</h3>
+          <p class="feature-desc">自动检测代码漏洞，提醒你修复</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="non-programmer-section">
+    <div class="container">
+      <h2 class="non-programmer-title scroll-reveal">不是程序员，<span>也能用 GitHub</span></h2>
+      <p class="non-programmer-desc scroll-reveal">
+        别以为 GitHub 只是程序员的专利！越来越多非程序员也在用 GitHub，
+        因为它的版本管理和协作能力真的太好用了。
+      </p>
+      <div class="use-case-grid">
+        <div class="use-case-card scroll-reveal">
+          <div class="use-case-icon">📝</div>
+          <h3 class="use-case-title">写文章 / 写书</h3>
+          <p class="use-case-desc">
+            很多人用 GitHub 写博客、写书。每次修改都有记录，
+            可以对比不同版本，还能让别人帮忙审稿、提建议。
+          </p>
+        </div>
+        <div class="use-case-card scroll-reveal">
+          <div class="use-case-icon">🎨</div>
+          <h3 class="use-case-title">设计素材管理</h3>
+          <p class="use-case-desc">
+            设计师也开始用 GitHub 管理设计源文件和组件库，
+            版本清晰，团队共享方便。
+          </p>
+        </div>
+        <div class="use-case-card scroll-reveal">
+          <div class="use-case-icon">📊</div>
+          <h3 class="use-case-title">数据 / 研究项目</h3>
+          <p class="use-case-desc">
+            科研人员、数据分析师用 GitHub 共享数据集和分析代码，
+            让研究可复现、可追溯。
+          </p>
+        </div>
+        <div class="use-case-card scroll-reveal">
+          <div class="use-case-icon">📚</div>
+          <h3 class="use-case-title">学习资源收集</h3>
+          <p class="use-case-desc">
+            很多人在 GitHub 上分享学习笔记、面试题、资源合集，
+            是一个巨大的知识宝库。
+          </p>
+        </div>
+        <div class="use-case-card scroll-reveal">
+          <div class="use-case-icon">🏠</div>
+          <h3 class="use-case-title">个人作品集</h3>
+          <p class="use-case-desc">
+            用 GitHub Pages 免费搭建个人网站、作品集，
+            找工作时把 GitHub 主页放简历里，加分！
+          </p>
+        </div>
+        <div class="use-case-card scroll-reveal">
+          <div class="use-case-icon">🤝</div>
+          <h3 class="use-case-title">开源社区参与</h3>
+          <p class="use-case-desc">
+            参与开源项目，认识大佬，提升技能，
+            还能为自己的简历增光添彩。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header scroll-reveal">
+        <span class="section-label">常见问题</span>
+        <h2 class="section-title">你可能想问的</h2>
+      </div>
+      <div class="faq-section">
+        <div class="faq-item scroll-reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Git 和 GitHub 是一回事吗？</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              <strong>不是！</strong>很多新手会搞混：<br><br>
+              • <strong>Git</strong>：是一个"版本控制软件"，装在你电脑上，用来管理代码历史<br>
+              • <strong>GitHub</strong>：是一个"网站/平台"，把大家的 Git 仓库放在云端，方便共享和协作<br><br>
+              打个比方：Git 是你电脑里的 Word，GitHub 是百度网盘/腾讯文档。
+              你用 Word 写文档，存在网盘里，可以和别人共享协作。
+            </p>
+          </div>
+        </div>
+        <div class="faq-item scroll-reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>GitHub 免费吗？要花钱吗？</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              <strong>个人使用基本免费！</strong><br><br>
+              GitHub 的免费版包括：<br>
+              • 无限数量的公开仓库和私有仓库<br>
+              • 最多 3 个协作者（私有仓库）<br>
+              • GitHub Pages 免费静态网站托管<br>
+              • 每月 2000 分钟的 Actions 自动化额度<br><br>
+              个人开发者、学生、小团队，免费版完全够用。
+              如果需要更多协作人数和企业功能，才需要付费。
+            </p>
+          </div>
+        </div>
+        <div class="faq-item scroll-reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>我不会写命令行，能用 GitHub 吗？</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              <strong>当然可以！</strong>有很多方式可以不用命令行：<br><br>
+              • <strong>GitHub Desktop</strong>：官方出品的桌面客户端，全图形界面，点鼠标就行<br>
+              • <strong>Trae / VS Code</strong>：编辑器里内置了 Git 功能，可视化操作<br>
+              • <strong>GitHub 网页</strong>：直接在网页上上传文件、编辑、提交<br><br>
+              命令行只是其中一种方式，而且不是必须的。新手推荐先用图形界面工具，等熟悉了再学命令行也不迟。
+            </p>
+          </div>
+        </div>
+        <div class="faq-item scroll-reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>代码放 GitHub 上安全吗？别人会偷吗？</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              <strong>看你设为公开还是私有：</strong><br><br>
+              • <strong>公开仓库 (Public)</strong>：任何人都能看、能下载。适合开源项目、学习分享<br>
+              • <strong>私有仓库 (Private)</strong>：只有你和你邀请的人才能看。适合公司项目、个人私活<br><br>
+              GitHub 的安全性是有保障的，毕竟是微软旗下的产品。
+              只要你不把密码、密钥等敏感信息提交到公开仓库，就不用担心。
+            </p>
+          </div>
+        </div>
+        <div class="faq-item scroll-reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>新手怎么开始学 GitHub？</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              推荐学习路径：<br><br>
+              <strong>第 1 步：注册账号，逛一逛</strong><br>
+              先去 github.com 注册个账号，随便看看，搜搜感兴趣的项目，点几个 Star。<br><br>
+              <strong>第 2 步：创建你的第一个仓库</strong><br>
+              在网页上点 New Repository，创建一个仓库，试着上传几个文件。<br><br>
+              <strong>第 3 步：用桌面客户端</strong><br>
+              下载 GitHub Desktop，试着克隆仓库、修改、提交、推送。<br><br>
+              <strong>第 4 步：学基础命令（可选）</strong><br>
+              等图形界面用熟了，想学得更深，再学 Git 命令行。
+            </p>
+          </div>
+        </div>
+        <div class="faq-item scroll-reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>国内访问 GitHub 慢怎么办？</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              国内访问 GitHub 确实可能比较慢，几个解决方案：<br><br>
+              • <strong>使用镜像站</strong>：比如 hub.fastgit.xyz 等镜像加速下载<br>
+              • <strong>Gitee 码云</strong>：国内版的 GitHub，速度快，功能类似<br>
+              • <strong>GitCode</strong>：CSDN 旗下的代码托管平台<br>
+              • <strong>Trae 内置</strong>：Trae IDE 里可以直接操作 GitHub，有优化<br><br>
+              另外，GitHub 在国内也在不断优化访问速度，日常使用基本没问题。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box scroll-reveal">
+        <h2 class="cta-title">准备好开启你的 GitHub 之旅了吗？</h2>
+        <p class="cta-desc">
+          注册一个 GitHub 账号，创建你的第一个仓库，
+          就算只是用来存笔记、写博客，也是很好的开始。
+        </p>
+        <a href="https://github.com" target="_blank" class="cta-btn">
+          前往 GitHub →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">GitHub 功能持续更新中 · 本文为入门指南，更多高级功能请参考官方文档</p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      item.classList.toggle('active');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
